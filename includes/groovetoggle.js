@@ -9,25 +9,33 @@
     return Grooveshark.getCurrentSongStatus().status;
   }
 
+  GroovetoggleClient.getCurrentSong = function(){
+    return Grooveshark.getCurrentSongStatus().song.songName;
+  }
+
   // Send playback status to bgprocess
-  GroovetoggleClient.messageBgProcess = function(){
-    opera.extension.postMessage({
-      topic: 'GroovetoggleStatus',
-      currentSongStatus: GroovetoggleClient.getStatus()
-    }); 
+  GroovetoggleClient._messageBgProcess = function(message){
+    opera.extension.postMessage(message);
   }
 
   // Toggle playback status. Sends message to bgprocess to update song status.
   GroovetoggleClient.toggle = function(){
     Grooveshark.togglePlayPause();
-    GroovetoggleClient.messageBgProcess();
+  }
+
+  GroovetoggleClient.listenSongStatus = function(e){
+    GroovetoggleClient._messageBgProcess({
+      topic: 'GroovetoggleStatus',
+      currentSongStatus: e.status,
+      currentSong: e.song.songName
+    });
   }
 
   GroovetoggleClient._init = function(){
     // Toggle playback status on message from bgprocess.
     opera.extension.addEventListener('message', GroovetoggleClient.toggle, false);
     // Keep bgprocess aware of playback status.
-    window.setInterval(GroovetoggleClient.messageBgProcess, 3000)
+    Grooveshark.setSongStatusCallback(GroovetoggleClient.listenSongStatus);
   }
 
   window.addEventListener('DOMContentLoaded', GroovetoggleClient._init, false); 

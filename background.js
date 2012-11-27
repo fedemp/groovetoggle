@@ -1,6 +1,8 @@
 (function(opera, Locale) {
   "use strict";
  
+  var Locale = {};
+
   var Button = function(toolbarUIItemProperties) {
     this._button = opera.contexts.toolbar.createItem(toolbarUIItemProperties);
     return this;

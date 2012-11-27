@@ -1,7 +1,9 @@
-(function() {
-
+(function(opera, Locale) {
+  "use strict";
+ 
   var Button = function(toolbarUIItemProperties) {
     this._button = opera.contexts.toolbar.createItem(toolbarUIItemProperties);
+    return this;
   };
 
   Button.prototype.append = function() {
@@ -31,42 +33,56 @@
 
   GroovetoggleBgProcess.init = function(toolbarUIItemProperties){
 
-    this._button = new Button(toolbarUIItemProperties);
+    // Create toolbar button
+    this.button = new Button(toolbarUIItemProperties);
 
-    opera.extension.addEventListener('connect', function(e){ GroovetoggleBgProcess.appendButton(); });
-    opera.extension.addEventListener('disconnect', function(e){ GroovetoggleBgProcess.removeButton(); });
+    // Append button to toolbar and save reference to injected script.
+    opera.extension.addEventListener('connect', function(e){ 
+      GroovetoggleBgProcess.appendButton();
+      GroovetoggleBgProcess._injectedScript = e.source;
+    });
 
-  }
+    // Remove button to toolbar and delete reference to injected script.
+    opera.extension.addEventListener('disconnect', function(){
+      GroovetoggleBgProcess.removeButton();
+      delete GroovetoggleBgProcess._injectedScript;
+    });
+
+    // Listen to messages from injected script.
+    opera.extension.addEventListener('message', GroovetoggleBgProcess.receiveMessages);
+
+  };
 
   GroovetoggleBgProcess.receiveMessages = function(e){
     if (e.type !== 'message' || e.data.topic !== 'GroovetoggleStatus') { return; }
     GroovetoggleBgProcess.setButtonTitle((Locale[e.data.currentSongStatus] || '') + e.data.currentSong);
-  }
+  };
 
   GroovetoggleBgProcess.appendButton = function(){
-    this._button.append();
-  }
+    this.button.append();
+  };
 
   GroovetoggleBgProcess.removeButton = function(){
-    this._button.remove();
-  }
+    this.button.remove();
+  };
 
   GroovetoggleBgProcess.setButtonTitle = function(title){
-    this._button.setTitle(title)
-  }
+    this.button.setTitle(title);
+  };
 
-  GroovetoggleBgProcess.clickHandler = function(e){
-    opera.extension.
-  }
+  GroovetoggleBgProcess.clickHandler = function(){
+    GroovetoggleBgProcess.messageInjectedScript({topic:'GroovetoggleMessage', message: 'toggle'});
+  };
 
   GroovetoggleBgProcess.messageInjectedScript = function(message){
-
-  }
+    GroovetoggleBgProcess._injectedScript.postMessage(message);
+  };
 
   GroovetoggleBgProcess.init({
     disabled: false,
-    icon: '/icons/icon_32.png'
-    onclick:
+    icon: '/icons/icon_32.png',
+    onclick: GroovetoggleBgProcess.clickHandler
   });
 
-}).call(this);
+}).call(this, this.opera, this.Locale);
+

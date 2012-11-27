@@ -2,10 +2,9 @@
 // @include http://grooveshark.com/*
 // ==/UserScript==
 
-(function(){
+(function(opera){
   "use strict";
-  var Grooveshark = window.Grooveshark;
-  var opera = this.opera;
+  var Grooveshark;
 
   var GroovetoggleClient = {};
 
@@ -29,6 +28,7 @@
   };
 
   GroovetoggleClient.listenSongStatus = function(e){
+    if (e.status == 'loading' || e.song == null) { return; }
     GroovetoggleClient._messageBgProcess({
       topic: 'GroovetoggleStatus',
       currentSongStatus: e.status,
@@ -37,12 +37,15 @@
   };
 
   GroovetoggleClient._init = function(){
+    // Save reference to Grooveshark object in top scope.
+    Grooveshark = window.Grooveshark;
     // Toggle playback status on message from bgprocess.
     opera.extension.addEventListener('message', GroovetoggleClient.toggle, false);
     // Keep bgprocess aware of playback status.
     Grooveshark.setSongStatusCallback(GroovetoggleClient.listenSongStatus);
+    
   };
 
-  window.addEventListener('DOMContentLoaded', GroovetoggleClient._init, false); 
+  window.addEventListener('load', GroovetoggleClient._init, false); 
 
-}).call(this); 
+}).call(this, this.opera); 

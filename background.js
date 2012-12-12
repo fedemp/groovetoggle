@@ -38,26 +38,26 @@
     // Create toolbar button
     this.button = new Button(toolbarUIItemProperties);
 
-    // Append button to toolbar and save reference to injected script.
-    opera.extension.onconnect = function(e){ 
-      GroovetoggleBgProcess.appendButton();
-      GroovetoggleBgProcess._injectedScript = e.source;
-    });
-
-    // Remove button to toolbar and delete reference to injected script.
-    opera.extension.ondisconnect = function(){
-      GroovetoggleBgProcess.removeButton();
-      delete GroovetoggleBgProcess._injectedScript;
-    });
-
     // Listen to messages from injected script.
     opera.extension.onmessage = GroovetoggleBgProcess.receiveMessages;
 
   };
 
   GroovetoggleBgProcess.receiveMessages = function(e){
-    if (e.type !== 'message' || e.data.topic !== 'GroovetoggleStatus') { return; }
-    GroovetoggleBgProcess.setButtonTitle((Locale[e.data.currentSongStatus] || '') + e.data.currentSong);
+    if (e.type !== 'message') { return; }
+    switch (e.data.topic) {
+      case 'GroovetoggleStatus':
+        GroovetoggleBgProcess.setButtonTitle((Locale[e.data.currentSongStatus] || '') + e.data.currentSong);
+        break;
+      case 'GroovetoggleConnect':
+        GroovetoggleBgProcess.appendButton();
+        GroovetoggleBgProcess._injectedScript = e.source;
+      case 'GroovetoggleDisconnect':
+        GroovetoggleBgProcess.removeButton();
+        delete GroovetoggleBgProcess._injectedScript;
+      default:
+        break;
+    }
   };
 
   GroovetoggleBgProcess.appendButton = function(){

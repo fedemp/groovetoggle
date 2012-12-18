@@ -52,9 +52,11 @@
       case 'GroovetoggleConnect':
         GroovetoggleBgProcess.appendButton();
         GroovetoggleBgProcess._injectedScript = e.source;
+        break;
       case 'GroovetoggleDisconnect':
         GroovetoggleBgProcess.removeButton();
         delete GroovetoggleBgProcess._injectedScript;
+        break;
       default:
         break;
     }

@@ -37,6 +37,8 @@
   };
 
   GroovetoggleClient._init = function(){
+    // Say 'hi' to bgProcess
+    opera.extension.postMessage({'topic':'GroovetoggleConnect'})
     // Save reference to Grooveshark object in top scope.
     Grooveshark = window.Grooveshark;
     // Toggle playback status on message from bgprocess.

@@ -41,15 +41,30 @@
     // Listen to messages from injected script.
     opera.extension.onmessage = GroovetoggleBgProcess.receiveMessages;
 
+    // Listen to close event of tabs so we know when the grooveshark tab is closed.
+    opera.extension.tabs.onclose = function(e){
+      if (e.tab.id == GroovetoggleBgProcess._tabId) {
+        GroovetoggleBgProcess.removeButton();
+        delete GroovetoggleBgProcess._injectedScript;
+        delete GroovetoggleBgProcess._tabId; 
+      }
+    }
+
   };
 
   GroovetoggleBgProcess.receiveMessages = function(e){
+    debugger;
     if (e.type !== 'message') { return; }
     switch (e.data.topic) {
+      case 'GroovetoggleConnect':
+        var tab = opera.extension.tabs.getSelected();
+        var tabId = tab.id;
+        GroovetoggleBgProcess._tabId = tabId;
+        break; 
       case 'GroovetoggleStatus':
         GroovetoggleBgProcess.setButtonTitle((Locale[e.data.currentSongStatus] || '') + e.data.currentSong);
         break;
-      case 'GroovetoggleConnect':
+      case 'GroovetoggleLoaded':
         GroovetoggleBgProcess.appendButton();
         GroovetoggleBgProcess._injectedScript = e.source;
         break;
@@ -84,7 +99,7 @@
 
   GroovetoggleBgProcess.init({
     disabled: false,
-    icon: '/icons/icon_32.png',
+    icon: 'icon_18.png',
     onclick: GroovetoggleBgProcess.clickHandler
   });
 

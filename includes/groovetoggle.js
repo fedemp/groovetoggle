@@ -36,18 +36,25 @@
     });
   };
 
-  GroovetoggleClient._init = function(){
+  GroovetoggleClient.onloadHandler = function(){
     // Say 'hi' to bgProcess
-    opera.extension.postMessage({'topic':'GroovetoggleConnect'})
+    opera.extension.postMessage({'topic':'GroovetoggleLoaded'})
     // Save reference to Grooveshark object in top scope.
     Grooveshark = window.Grooveshark;
     // Toggle playback status on message from bgprocess.
     opera.extension.addEventListener('message', GroovetoggleClient.toggle, false);
     // Keep bgprocess aware of playback status.
-    Grooveshark.setSongStatusCallback(GroovetoggleClient.listenSongStatus);
-    
+    Grooveshark.setSongStatusCallback(GroovetoggleClient.listenSongStatus); 
+  }
+
+  GroovetoggleClient.init = function(){
+    // Send bgProcess a message that the current tab is showing Grooveshark.
+    opera.extension.postMessage({'topic':'GroovetoggleConnect'});
+
+    // Init the extension on page load so we know that player is ready.
+    window.addEventListener('load', GroovetoggleClient.onloadHandler, false); 
   };
 
-  window.addEventListener('load', GroovetoggleClient._init, false); 
+  GroovetoggleClient.init();
 
 }).call(this, this.opera); 

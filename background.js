@@ -24,13 +24,13 @@
       BgProcess.button.append();
     },
     GroovetoggleStatus: function(e){
-      GroovetoggleBgProcess.setButtonTitle((Locale[e.data.currentSongStatus] || '') + e.data.currentSong);
+      BgProcess.button.setTitle(e.data.currentSongStatus + ' ' + e.data.currentSong);
     },
     closeHandler: function(e){
       if (e.tab.id == BgProcess.tab) {
         BgProcess.button.remove();
-        delete GroovetoggleBgProcess.port;
-        delete GroovetoggleBgProcess.tab; 
+        delete BgProcess.port;
+        delete BgProcess.tab; 
       }
     
     },

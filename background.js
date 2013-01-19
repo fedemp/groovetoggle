@@ -43,10 +43,10 @@
 
     // Listen to close event of tabs so we know when the grooveshark tab is closed.
     opera.extension.tabs.onclose = function(e){
-      if (e.tab.id == GroovetoggleBgProcess._tabId) {
+      if (e.tab.id == GroovetoggleBgProcess._tab) {
         GroovetoggleBgProcess.removeButton();
         delete GroovetoggleBgProcess._injectedScript;
-        delete GroovetoggleBgProcess._tabId; 
+        delete GroovetoggleBgProcess._tab; 
       }
     }
 
@@ -57,20 +57,19 @@
     if (e.type !== 'message') { return; }
     switch (e.data.topic) {
       case 'GroovetoggleConnect':
-        var tab = opera.extension.tabs.getSelected();
-        var tabId = tab.id;
-        GroovetoggleBgProcess._tabId = tabId;
+        var port = e.source;
+        var tab = undefined;
+        var tabs = opera.extension.tabs.getAll();
+        var tabsLength = tabs.length;
+        while (tabsLength-- && tab == undefined) {
+          tab = port == tabs[tabsLength].port ? tabs[tabsLength] : undefined;
+        }
+        GroovetoggleBgProcess._injectedScript = port;
+        GroovetoggleBgProcess._tab = tab.id;
+        GroovetoggleBgProcess.appendButton();
         break; 
       case 'GroovetoggleStatus':
         GroovetoggleBgProcess.setButtonTitle((Locale[e.data.currentSongStatus] || '') + e.data.currentSong);
-        break;
-      case 'GroovetoggleLoaded':
-        GroovetoggleBgProcess.appendButton();
-        GroovetoggleBgProcess._injectedScript = e.source;
-        break;
-      case 'GroovetoggleDisconnect':
-        GroovetoggleBgProcess.removeButton();
-        delete GroovetoggleBgProcess._injectedScript;
         break;
       default:
         break;

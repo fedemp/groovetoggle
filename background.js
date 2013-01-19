@@ -1,76 +1,63 @@
 (function(opera, Button) {
   "use strict";
- 
-  var GroovetoggleBgProcess = {};
 
-  GroovetoggleBgProcess.init = function(toolbarUIItemProperties){
-
-    // Create toolbar button
-    this.button = new Button(toolbarUIItemProperties);
-
-    // Listen to messages from injected script.
-    opera.extension.onmessage = GroovetoggleBgProcess.receiveMessages;
-
-    // Listen to close event of tabs so we know when the grooveshark tab is closed.
-    opera.extension.tabs.onclose = function(e){
-      if (e.tab.id == GroovetoggleBgProcess._tab) {
-        GroovetoggleBgProcess.removeButton();
-        delete GroovetoggleBgProcess._injectedScript;
-        delete GroovetoggleBgProcess._tab; 
+  // App
+  var BgProcess = {
+    receiveMessages: function(e){
+      if (e.type !== 'message') { return; }
+      if (e.data.topic in BgProcess) {
+        BgProcess[e.data.topic](e);
       }
-    }
+    },
+    GroovetoggleConnect: function(e) {
+      var port = e.source;
+      var tab = undefined;
+      var tabs = opera.extension.tabs.getAll();
+      var tabsLength = tabs.length;
 
+      while (tabsLength-- && tab == undefined) {
+        tab = port == tabs[tabsLength].port ? tabs[tabsLength] : undefined;
+      }
+
+      BgProcess.port = port;
+      BgProcess.tab = tab.id;
+      BgProcess.button.append();
+    },
+    GroovetoggleStatus: function(e){
+      GroovetoggleBgProcess.setButtonTitle((Locale[e.data.currentSongStatus] || '') + e.data.currentSong);
+    },
+    closeHandler: function(e){
+      if (e.tab.id == BgProcess.tab) {
+        BgProcess.button.remove();
+        delete GroovetoggleBgProcess.port;
+        delete GroovetoggleBgProcess.tab; 
+      }
+    
+    },
+    clickHandler: function(){
+      BgProcess.port.postMessage({topic:'GroovetoggleMessage', message: 'toggle'});
+    },
+
+    init: function(){
+      // Create toolbar button
+      BgProcess.button = new Button(buttonConfiguration);
+      
+      // Listen to messages from injected script.
+      opera.extension.onmessage = BgProcess.receiveMessages;
+
+      // Listen to close event of tabs so we know when the grooveshark tab is closed.
+      opera.extension.tabs.onclose = BgProcess.closeHandler;
+    } 
   };
 
-  GroovetoggleBgProcess.receiveMessages = function(e){
-    debugger;
-    if (e.type !== 'message') { return; }
-    switch (e.data.topic) {
-      case 'GroovetoggleConnect':
-        var port = e.source;
-        var tab = undefined;
-        var tabs = opera.extension.tabs.getAll();
-        var tabsLength = tabs.length;
-        while (tabsLength-- && tab == undefined) {
-          tab = port == tabs[tabsLength].port ? tabs[tabsLength] : undefined;
-        }
-        GroovetoggleBgProcess._injectedScript = port;
-        GroovetoggleBgProcess._tab = tab.id;
-        GroovetoggleBgProcess.appendButton();
-        break; 
-      case 'GroovetoggleStatus':
-        GroovetoggleBgProcess.setButtonTitle((Locale[e.data.currentSongStatus] || '') + e.data.currentSong);
-        break;
-      default:
-        break;
-    }
-  };
-
-  GroovetoggleBgProcess.appendButton = function(){
-    this.button.append();
-  };
-
-  GroovetoggleBgProcess.removeButton = function(){
-    this.button.remove();
-  };
-
-  GroovetoggleBgProcess.setButtonTitle = function(title){
-    this.button.setTitle(title);
-  };
-
-  GroovetoggleBgProcess.clickHandler = function(){
-    GroovetoggleBgProcess.messageInjectedScript({topic:'GroovetoggleMessage', message: 'toggle'});
-  };
-
-  GroovetoggleBgProcess.messageInjectedScript = function(message){
-    GroovetoggleBgProcess._injectedScript.postMessage(message);
-  };
-
-  GroovetoggleBgProcess.init({
+  // Configuration
+  var buttonConfiguration = {
     disabled: false,
     icon: 'icon_18.png',
-    onclick: GroovetoggleBgProcess.clickHandler
-  });
+    onclick: BgProcess.clickHandler
+  };
+
+  BgProcess.init();
 
 }).call(this, this.opera, this.window.Button);
 

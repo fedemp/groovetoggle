@@ -52,7 +52,7 @@
 
   // Configuration
   var buttonConfiguration = {
-    disabled: false,
+    disabled: true,
     icon: 'icon_18.png',
     onclick: BgProcess.clickHandler
   };

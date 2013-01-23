@@ -25,6 +25,13 @@
     },
     GroovetoggleStatus: function(e){
       BgProcess.button.setTitle(e.data.currentSongStatus + ' ' + e.data.currentSong);
+      if (BgProcess[e.data.currentSongStatus + 'Handler'] !== undefined) {
+        BgProcess[e.data.currentSongStatus + 'Handler']();
+      }
+    },
+    playingHandler: function(){
+      BgProcess.button.disabled = false;
+      BgProcess.button.icon = 'pause_18.png';
     },
     closeHandler: function(e){
       if (e.tab.id == BgProcess.tab) {

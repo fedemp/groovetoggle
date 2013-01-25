@@ -27,5 +27,13 @@
     return this;
   };
 
+  Button.prototype.enable = function() {
+    this._button.disabled = false;
+  }
+
+  Button.prototype.disable = function() {
+    this._button.disabled = true;
+  }
+
   window.Button = Button;
 }).call(this, this.window, this.opera);

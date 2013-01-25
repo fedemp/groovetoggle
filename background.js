@@ -30,7 +30,7 @@
       }
     },
     playingHandler: function(){
-      BgProcess.button.disabled = false;
+      BgProcess.button.enable();
       BgProcess.button.icon = 'pause_18.png';
     },
     closeHandler: function(e){

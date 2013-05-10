@@ -73,10 +73,11 @@ GrooveToggle =
     onLoad: ->
       Grooveshark = root.window.Grooveshark
 
+      Grooveshark.setSongStatusCallback (event) ->
+        GrooveToggle.myFgApp.handleSongStatus.call GrooveToggle.myFgApp, event
+
       opera.extension.onmessage = (message) ->
         GrooveToggle.myFgApp.handleMessage.call GrooveToggle.myFgApp, message
-
-      Grooveshark.setSongStatusCallback @handleSongStatus 
 
     ###*
     # * Let background script know that we are on Grooveshark.

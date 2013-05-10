@@ -81,10 +81,12 @@
 
       onLoad: function() {
         Grooveshark = root.window.Grooveshark;
-        opera.extension.onmessage = function(message) {
+        Grooveshark.setSongStatusCallback(function(event) {
+          return GrooveToggle.myFgApp.handleSongStatus.call(GrooveToggle.myFgApp, event);
+        });
+        return opera.extension.onmessage = function(message) {
           return GrooveToggle.myFgApp.handleMessage.call(GrooveToggle.myFgApp, message);
         };
-        return Grooveshark.setSongStatusCallback(this.handleSongStatus);
       },
       /**
       # * Let background script know that we are on Grooveshark.

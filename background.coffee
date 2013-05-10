@@ -194,13 +194,11 @@ GrooveToggle =
 
         switch body.status
           when 'none' 
-            @handleClick = noneFunction
             result =
               title: ''
               icon: 'play_18.png'
               disabled: true
           when 'loading', 'playing', 'completed', 'paused'
-            @handleClick = playbackFunction
             status = do body.status.charAt(0).toUpperCase + body.status.substr 1
             title = if song then "#{status} #{song.songName} by #{song.artistName}" else "#{status}"
             result = 

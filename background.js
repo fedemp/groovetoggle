@@ -206,7 +206,6 @@
           song = body.song;
           switch (body.status) {
             case 'none':
-              this.handleClick = noneFunction;
               result = {
                 title: '',
                 icon: 'play_18.png',
@@ -217,7 +216,6 @@
             case 'playing':
             case 'completed':
             case 'paused':
-              this.handleClick = playbackFunction;
               status = body.status.charAt(0).toUpperCase() + body.status.substr(1);
               title = song ? "" + status + " " + song.songName + " by " + song.artistName : "" + status;
               result = {

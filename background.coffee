@@ -155,10 +155,10 @@ GrooveToggle =
         # Using a while loop cause we wanna break as soon as we find the right tab
         allTabs = do opera.extension.tabs.getAll
         {length} = allTabs
-        while length -= 1
-          if allTabs[length].port is source
-            tabId = allTabs[length].id
-            break
+        while length
+          length -= 1
+          if allTabs[length].port is source then tabId = allTabs[length].id
+          break
 
         # Show button on toolbar.
         GrooveToggle.Button.init().update(

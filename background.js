@@ -166,11 +166,12 @@
           source = message.source;
           allTabs = opera.extension.tabs.getAll();
           length = allTabs.length;
-          while (length -= 1) {
+          while (length) {
+            length -= 1;
             if (allTabs[length].port === source) {
               tabId = allTabs[length].id;
-              break;
             }
+            break;
           }
           return GrooveToggle.Button.init().update({
             title: 'GrooveToggle',

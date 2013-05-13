@@ -205,7 +205,15 @@ GrooveToggle =
               title: ''
               icon: 'play_18.png'
               disabled: true
-          when 'loading', 'playing', 'completed', 'paused'
+          when 'paused'
+            status = do body.status.charAt(0).toUpperCase + body.status.substr 1
+            title = if song then "#{status} #{song.songName} by #{song.artistName}" else "#{status}"
+            result = 
+              title: title
+              disabled: false
+              icon: 'pause_18.png'
+
+          when 'loading', 'playing', 'completed'
             status = do body.status.charAt(0).toUpperCase + body.status.substr 1
             title = if song then "#{status} #{song.songName} by #{song.artistName}" else "#{status}"
             result = 
@@ -250,7 +258,7 @@ GrooveToggle =
           if not urlRegEx.test tab.url
             window.clearInterval interval
             do self.destroy
-        , 5000
+        , 1000
             
       ###*
       # Init the app.

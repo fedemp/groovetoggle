@@ -218,10 +218,18 @@
                 disabled: true
               };
               break;
+            case 'paused':
+              status = body.status.charAt(0).toUpperCase() + body.status.substr(1);
+              title = song ? "" + status + " " + song.songName + " by " + song.artistName : "" + status;
+              result = {
+                title: title,
+                disabled: false,
+                icon: 'pause_18.png'
+              };
+              break;
             case 'loading':
             case 'playing':
             case 'completed':
-            case 'paused':
               status = body.status.charAt(0).toUpperCase() + body.status.substr(1);
               title = song ? "" + status + " " + song.songName + " by " + song.artistName : "" + status;
               result = {

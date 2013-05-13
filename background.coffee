@@ -5,7 +5,8 @@
 # @module GrooveToggle
 ###
 
-root = this
+root = @
+{window} = @
 opera = root.opera
 
 GrooveToggle =
@@ -119,7 +120,8 @@ GrooveToggle =
     source = undefined
 
     # The tab id where the injected script is running.
-    tabId = undefined
+    tab = undefined # for pingTab
+    tabId = undefined # for handleTabClose
 
     # Return public methods
 
@@ -157,7 +159,9 @@ GrooveToggle =
         {length} = allTabs
         while length
           length -= 1
-          if allTabs[length].port is source then tabId = allTabs[length].id
+          if allTabs[length].port is source
+            tab = allTabs[length]
+            tabId = tab.id
           break
 
         # Show button on toolbar.
@@ -167,6 +171,9 @@ GrooveToggle =
           disabled: false
           onclick: @handleClick 
         ).show()
+
+        # Ping tab url
+        do @pingTab
 
       ###*
       # Listen to clicks to button on Opera toolbar.
@@ -216,14 +223,35 @@ GrooveToggle =
       # @param {Object} e The original event.
       ###
       
-      handleTabClose: (e) ->
+      handleTabClose: (e) -> 
+        if e.tab.id is tabId then do @destroy
 
-        if e.tab.id is tabId
-          do GrooveToggle.Button.hide
-          tab = source = null
+      ###*
+      # Hide button and remove references to injected script.
+      #
+      # @method destroy
+      ###
 
-        return
+      destroy: ->
+        do GrooveToggle.Button.hide
+        tabId = source = null
 
+      ###*
+      # Ping the tab with the injected script to make sure we are still in Grooveshark.
+      #
+      # @method pingTab
+      ###
+      
+      pingTab: ->
+        self = @
+        urlRegEx = /^http[s]?:\/\/grooveshark\.com.*/
+        interval = window.setInterval ->
+          window.console?.log 'interval'
+          if not urlRegEx.test tab.url
+            window.clearInterval interval
+            do self.destroy
+        , 5000
+            
       ###*
       # Init the app.
       #
@@ -234,6 +262,5 @@ GrooveToggle =
           GrooveToggle.myBgApp.listen.call(GrooveToggle.myBgApp, e)
 
         opera.extension.tabs.onclose = GrooveToggle.myBgApp.handleTabClose
-        return
 
 do GrooveToggle.myBgApp.init

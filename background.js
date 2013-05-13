@@ -7,9 +7,11 @@
   # @module GrooveToggle
   */
 
-  var GrooveToggle, opera, root;
+  var GrooveToggle, opera, root, window;
 
   root = this;
+
+  window = this.window;
 
   opera = root.opera;
 
@@ -132,9 +134,10 @@
     */
 
     myBgApp: (function() {
-      var pub, source, tabId;
+      var pub, source, tab, tabId;
 
       source = void 0;
+      tab = void 0;
       tabId = void 0;
       return pub = {
         /**
@@ -169,16 +172,18 @@
           while (length) {
             length -= 1;
             if (allTabs[length].port === source) {
-              tabId = allTabs[length].id;
+              tab = allTabs[length];
+              tabId = tab.id;
             }
             break;
           }
-          return GrooveToggle.Button.init().update({
+          GrooveToggle.Button.init().update({
             title: 'GrooveToggle',
             icon: 'icon_18.png',
             disabled: false,
             onclick: this.handleClick
           }).show();
+          return this.pingTab();
         },
         /**
         # Listen to clicks to button on Opera toolbar.
@@ -235,12 +240,42 @@
         */
 
         handleTabClose: function(e) {
-          var tab;
-
           if (e.tab.id === tabId) {
-            GrooveToggle.Button.hide();
-            tab = source = null;
+            return this.destroy();
           }
+        },
+        /**
+        # Hide button and remove references to injected script.
+        #
+        # @method destroy
+        */
+
+        destroy: function() {
+          GrooveToggle.Button.hide();
+          return tabId = source = null;
+        },
+        /**
+        # Ping the tab with the injected script to make sure we are still in Grooveshark.
+        #
+        # @method pingTab
+        */
+
+        pingTab: function() {
+          var interval, self, urlRegEx;
+
+          self = this;
+          urlRegEx = /^http[s]?:\/\/grooveshark\.com.*/;
+          return interval = window.setInterval(function() {
+            var _ref;
+
+            if ((_ref = window.console) != null) {
+              _ref.log('interval');
+            }
+            if (!urlRegEx.test(tab.url)) {
+              window.clearInterval(interval);
+              return self.destroy();
+            }
+          }, 1000);
         },
         /**
         # Init the app.
@@ -252,7 +287,7 @@
           opera.extension.onmessage = function(e) {
             return GrooveToggle.myBgApp.listen.call(GrooveToggle.myBgApp, e);
           };
-          opera.extension.tabs.onclose = GrooveToggle.myBgApp.handleTabClose;
+          return opera.extension.tabs.onclose = GrooveToggle.myBgApp.handleTabClose;
         }
       };
     })()

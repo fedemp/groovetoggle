@@ -68,7 +68,7 @@ GrooveToggle =
     # * Start listening messages from background script.
     # * Start listening from song status changes.
     #
-    # @method onload
+    # @method onLoad
     ###
     onLoad: ->
       Grooveshark = root.window.Grooveshark

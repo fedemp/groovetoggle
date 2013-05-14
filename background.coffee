@@ -42,12 +42,10 @@ GrooveToggle =
       # @method init
       # @chainable
       # @param {Object} [options={}] Defines button options.
-      #   @param {Boolean} [options.disabled=false] Should the icon be disabled
-      #   when shown?
+      #   @param {Boolean} [options.disabled=false] Should the icon be disabled when shown?
       #   @param {String} [options.icon=""] URL to the icon file.
-      #   @param {Function} [options.onclick=null] Callback that will handle
-      #   the click event.
-      #   @param {String} [title=""] Content of tooltip when hovering over
+      #   @param {Function} [options.onclick=null] Callback that will handle the click event.
+      #   @param {String} [options.title=""] Content of tooltip when hovering over
       #   button.
       ###
       init: (options = {}) ->
@@ -59,9 +57,10 @@ GrooveToggle =
 
       ###*
       # Update buttons options.
+      #
       # @method update
       # @chainable
-      # @param {Object} options={} Collection of properties to update.
+      # @param {Object} options Collection of properties to update.
       #   @param {String} [options.title] New content for tooltip.
       #   @param {String} [options.icon] New URL for icon.
       #   @param {Boolean} [options.disabled] Should the button be disabled?
@@ -132,7 +131,6 @@ GrooveToggle =
       #
       # @method listen
       # @param {Object} [message] An object that represents the message. It must contain a `topic` and a `body`.
-      #   @param {String} topic Name of the method to be called.
       ###
 
       listen: (message) ->

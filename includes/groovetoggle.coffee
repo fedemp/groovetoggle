@@ -38,7 +38,7 @@ GrooveToggle =
     ###*
     # Handle song status change.
     #
-    # @handleSongStatus
+    # @method handleSongStatus
     # @param {Object} event Original event fired by Grooveshark.
     ###
     handleSongStatus: (event) ->

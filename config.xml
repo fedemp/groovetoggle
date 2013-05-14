@@ -4,8 +4,8 @@
   <author href="http://fedemp.com.ar" xml:lang="es">Federico Panico</author>
   <description xml:lang="en">Toggle Grooveshark play status from the toolbar.</description>
   <description xml:lang="es">Pausa y reproduce la música en Grooveshark desde la barra de herramientas.</description>
-  <icon width="18" height="18" src="play_18.png"/>
-  <access origin="http://grooveshark.com/*"/>
+  <icon src="play_16.png"/>
+  <icon src="play_64.png"/>
   <license href="http://opensource.org/licenses/MIT">
     Copyright 2013 Federico Panico
 

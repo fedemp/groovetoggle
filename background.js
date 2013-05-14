@@ -28,7 +28,7 @@
 
       defaults = {
         disabled: false,
-        icon: 'play_18.png',
+        icon: 'play_16.png',
         title: '',
         onclick: function() {}
       };
@@ -42,12 +42,10 @@
         # @method init
         # @chainable
         # @param {Object} [options={}] Defines button options.
-        #   @param {Boolean} [options.disabled=false] Should the icon be disabled
-        #   when shown?
+        #   @param {Boolean} [options.disabled=false] Should the icon be disabled when shown?
         #   @param {String} [options.icon=""] URL to the icon file.
-        #   @param {Function} [options.onclick=null] Callback that will handle
-        #   the click event.
-        #   @param {String} [title=""] Content of tooltip when hovering over
+        #   @param {Function} [options.onclick=null] Callback that will handle the click event.
+        #   @param {String} [options.title=""] Content of tooltip when hovering over
         #   button.
         */
 
@@ -60,14 +58,14 @@
           }
           button = toolbar.createItem(defaults);
           button.update(options);
-          window.button = button;
           return this;
         },
         /**
         # Update buttons options.
+        #
         # @method update
         # @chainable
-        # @param {Object} options={} Collection of properties to update.
+        # @param {Object} options Collection of properties to update.
         #   @param {String} [options.title] New content for tooltip.
         #   @param {String} [options.icon] New URL for icon.
         #   @param {Boolean} [options.disabled] Should the button be disabled?
@@ -134,18 +132,18 @@
     */
 
     myBgApp: (function() {
-      var pub, source, tab, tabId;
+      var interval, pub, source, tab, tabId;
 
       source = void 0;
       tab = void 0;
       tabId = void 0;
+      interval = void 0;
       return pub = {
         /**
         # Listen to messages from injected script.
         #
         # @method listen
         # @param {Object} [message] An object that represents the message. It must contain a `topic` and a `body`.
-        #   @param {String} topic Name of the method to be called.
         */
 
         listen: function(message) {
@@ -179,8 +177,7 @@
           }
           GrooveToggle.Button.init().update({
             title: 'GrooveToggle',
-            icon: 'icon_18.png',
-            disabled: false,
+            icon: 'play_16.png',
             onclick: this.handleClick
           }).show();
           return this.pingTab();
@@ -214,8 +211,7 @@
             case 'none':
               result = {
                 title: '',
-                icon: 'play_18.png',
-                disabled: true
+                icon: 'play_16.png'
               };
               break;
             case 'paused':
@@ -223,8 +219,7 @@
               title = song ? "" + status + " " + song.songName + " by " + song.artistName : "" + status;
               result = {
                 title: title,
-                disabled: false,
-                icon: 'pause_18.png'
+                icon: 'pause_16.png'
               };
               break;
             case 'loading':
@@ -234,8 +229,7 @@
               title = song ? "" + status + " " + song.songName + " by " + song.artistName : "" + status;
               result = {
                 title: title,
-                disabled: false,
-                icon: 'play_18.png'
+                icon: 'play_16.png'
               };
           }
           GrooveToggle.Button.update(result);
@@ -259,8 +253,11 @@
         */
 
         destroy: function() {
+          var button;
+
+          window.clearInterval(interval);
           GrooveToggle.Button.hide();
-          return tabId = source = null;
+          return tab = button = tabId = source = null;
         },
         /**
         # Ping the tab with the injected script to make sure we are still in Grooveshark.
@@ -269,7 +266,7 @@
         */
 
         pingTab: function() {
-          var interval, self, urlRegEx;
+          var self, urlRegEx;
 
           self = this;
           urlRegEx = /^http[s]?:\/\/grooveshark\.com.*/;
@@ -295,7 +292,9 @@
           opera.extension.onmessage = function(e) {
             return GrooveToggle.myBgApp.listen.call(GrooveToggle.myBgApp, e);
           };
-          return opera.extension.tabs.onclose = GrooveToggle.myBgApp.handleTabClose;
+          return opera.extension.tabs.onclose = function(e) {
+            return GrooveToggle.myBgApp.handleTabClose.call(GrooveToggle.myBgApp, e);
+          };
         }
       };
     })()

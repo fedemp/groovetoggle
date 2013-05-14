@@ -24,7 +24,7 @@ GrooveToggle =
     # are described.
     defaults =
       disabled: false
-      icon: 'play_18.png'
+      icon: 'play_16.png'
       title: ''
       onclick: ->
 
@@ -52,7 +52,6 @@ GrooveToggle =
         if button isnt undefined then return @
         button = toolbar.createItem defaults
         button.update options
-        window.button = button
         @
 
       ###*
@@ -122,6 +121,9 @@ GrooveToggle =
     tab = undefined # for pingTab
     tabId = undefined # for handleTabClose
 
+    # Reference to the pingTab setInterval
+    interval = undefined
+
     # Return public methods
 
     pub =
@@ -165,8 +167,7 @@ GrooveToggle =
         # Show button on toolbar.
         GrooveToggle.Button.init().update(
           title: 'GrooveToggle'
-          icon: 'icon_18.png'
-          disabled: false
+          icon: 'play_16.png'
           onclick: @handleClick 
         ).show()
 
@@ -201,23 +202,20 @@ GrooveToggle =
           when 'none' 
             result =
               title: ''
-              icon: 'play_18.png'
-              disabled: true
+              icon: 'play_16.png'
           when 'paused'
             status = do body.status.charAt(0).toUpperCase + body.status.substr 1
             title = if song then "#{status} #{song.songName} by #{song.artistName}" else "#{status}"
             result = 
               title: title
-              disabled: false
-              icon: 'pause_18.png'
+              icon: 'pause_16.png'
 
           when 'loading', 'playing', 'completed'
             status = do body.status.charAt(0).toUpperCase + body.status.substr 1
             title = if song then "#{status} #{song.songName} by #{song.artistName}" else "#{status}"
             result = 
               title: title
-              disabled: false
-              icon: 'play_18.png'
+              icon: 'play_16.png'
 
         GrooveToggle.Button.update result 
         return
@@ -239,8 +237,9 @@ GrooveToggle =
       ###
 
       destroy: ->
+        window.clearInterval interval
         do GrooveToggle.Button.hide
-        tabId = source = null
+        tab = button = tabId = source = null
 
       ###*
       # Ping the tab with the injected script to make sure we are still in Grooveshark.
@@ -265,8 +264,9 @@ GrooveToggle =
       ###
       init: ->
         opera.extension.onmessage = (e) ->
-          GrooveToggle.myBgApp.listen.call(GrooveToggle.myBgApp, e)
+          GrooveToggle.myBgApp.listen.call GrooveToggle.myBgApp, e
 
-        opera.extension.tabs.onclose = GrooveToggle.myBgApp.handleTabClose
+        opera.extension.tabs.onclose = (e) ->
+          GrooveToggle.myBgApp.handleTabClose.call GrooveToggle.myBgApp, e
 
 do GrooveToggle.myBgApp.init

@@ -1,0 +1,417 @@
+{
+    "project": {},
+    "files": {
+        "includes/groovetoggle.coffee": {
+            "name": "includes/groovetoggle.coffee",
+            "modules": {
+                "GrooveToggle": 1
+            },
+            "classes": {
+                "GrooveToggle.myFgApp": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "GrooveToggle": 1
+            }
+        },
+        "background.coffee": {
+            "name": "background.coffee",
+            "modules": {},
+            "classes": {
+                "GrooveToggle.Button": 1,
+                "GrooveToggle.myBgApp": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "GrooveToggle": 1
+            }
+        }
+    },
+    "modules": {
+        "GrooveToggle": {
+            "name": "GrooveToggle",
+            "submodules": {},
+            "classes": {
+                "GrooveToggle.myFgApp": 1,
+                "GrooveToggle.Button": 1,
+                "GrooveToggle.myBgApp": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "GrooveToggle": 1
+            },
+            "tag": "module",
+            "file": "background.coffee",
+            "line": 109,
+            "description": "*Groovetoggle* lets you control playback of Grooveshark from Opera."
+        }
+    },
+    "classes": {
+        "GrooveToggle.myFgApp": {
+            "name": "GrooveToggle.myFgApp",
+            "shortname": "GrooveToggle.myFgApp",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle",
+            "file": "includes/groovetoggle.coffee",
+            "line": 20,
+            "description": "`myFgApp` contains the injected script logic."
+        },
+        "GrooveToggle.Button": {
+            "name": "GrooveToggle.Button",
+            "shortname": "GrooveToggle.Button",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle",
+            "file": "background.coffee",
+            "line": 14,
+            "description": "`Button` works a container for methods that manage the toolbar button."
+        },
+        "GrooveToggle.myBgApp": {
+            "name": "GrooveToggle.myBgApp",
+            "shortname": "GrooveToggle.myBgApp",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle",
+            "file": "background.coffee",
+            "line": 109,
+            "description": "`myBgApp` contains the background process logic including listeners."
+        }
+    },
+    "classitems": [
+        {
+            "file": "includes/groovetoggle.coffee",
+            "line": 29,
+            "description": "Handles messages from background script.",
+            "itemtype": "method",
+            "name": "handleMessage",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "Original message event.",
+                    "type": "Object"
+                }
+            ],
+            "class": "GrooveToggle.myFgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "includes/groovetoggle.coffee",
+            "line": 38,
+            "description": "Handle song status change.",
+            "itemtype": "method",
+            "name": "handleSongStatus",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "Original event fired by Grooveshark.",
+                    "type": "Object"
+                }
+            ],
+            "class": "GrooveToggle.myFgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "includes/groovetoggle.coffee",
+            "line": 49,
+            "description": "Send messages to background script e.g. current song status.",
+            "itemtype": "method",
+            "name": "sendMessage",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "Message to send. Must have a `topic` and a `body`",
+                    "type": "Object"
+                }
+            ],
+            "class": "GrooveToggle.myFgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "includes/groovetoggle.coffee",
+            "line": 58,
+            "description": "Make Grooveshark API toggle between 'play' and 'pause'",
+            "itemtype": "method",
+            "name": "togglePlayPause",
+            "class": "GrooveToggle.myFgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "includes/groovetoggle.coffee",
+            "line": 66,
+            "description": "* Save reference to Grooveshark API. \n* Start listening messages from background script.\n* Start listening from song status changes.",
+            "itemtype": "method",
+            "name": "onLoad",
+            "class": "GrooveToggle.myFgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "includes/groovetoggle.coffee",
+            "line": 82,
+            "description": "* Let background script know that we are on Grooveshark.\n* Wait for the onload event to the Grooveshark API will be ready.",
+            "itemtype": "method",
+            "name": "init",
+            "class": "GrooveToggle.myFgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 38,
+            "description": "Creates the button with specified or default options but does not show\nit by default. May be called by other methods if not called before.",
+            "itemtype": "method",
+            "name": "init",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "Defines button options.",
+                    "type": "Object",
+                    "optional": true,
+                    "optdefault": "{}",
+                    "props": [
+                        {
+                            "name": "disabled",
+                            "description": "Should the icon be disabled when shown?",
+                            "type": "Boolean",
+                            "optional": true,
+                            "optdefault": "false"
+                        },
+                        {
+                            "name": "icon",
+                            "description": "URL to the icon file.",
+                            "type": "String",
+                            "optional": true,
+                            "optdefault": "\"\""
+                        },
+                        {
+                            "name": "onclick",
+                            "description": "Callback that will handle the click event.",
+                            "type": "Function",
+                            "optional": true,
+                            "optdefault": "null"
+                        },
+                        {
+                            "name": "title",
+                            "description": "Content of tooltip when hovering over\n  button.",
+                            "type": "String",
+                            "optional": true,
+                            "optdefault": "\"\""
+                        }
+                    ]
+                }
+            ],
+            "class": "GrooveToggle.Button",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 58,
+            "description": "Update buttons options.",
+            "itemtype": "method",
+            "name": "update",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "options",
+                    "description": "Collection of properties to update.",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "title",
+                            "description": "New content for tooltip.",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "icon",
+                            "description": "New URL for icon.",
+                            "type": "String",
+                            "optional": true
+                        },
+                        {
+                            "name": "disabled",
+                            "description": "Should the button be disabled?",
+                            "type": "Boolean",
+                            "optional": true
+                        },
+                        {
+                            "name": "onclick",
+                            "description": "New handler for click event.",
+                            "type": "Function",
+                            "optional": true
+                        }
+                    ]
+                }
+            ],
+            "class": "GrooveToggle.Button",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 76,
+            "description": "Shows the button in the toolbar. It will be initialized if it has not\nbeen done before.",
+            "itemtype": "method",
+            "name": "show",
+            "chainable": 1,
+            "class": "GrooveToggle.Button",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 88,
+            "description": "Hides the button in the toolbar. It will be initialized if it has not\nbeen done before.",
+            "itemtype": "method",
+            "name": "hide",
+            "chainable": 1,
+            "class": "GrooveToggle.Button",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 100,
+            "description": "Is the button currently being shown in the toolbar?",
+            "itemtype": "method",
+            "name": "isVisible",
+            "return": {
+                "description": "Is visible or not.",
+                "type": "Boolean"
+            },
+            "class": "GrooveToggle.Button",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 129,
+            "description": "Listen to messages from injected script.",
+            "itemtype": "method",
+            "name": "listen",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "An object that represents the message. It must contain a `topic` and a `body`.",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "class": "GrooveToggle.myBgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 139,
+            "description": "Triggered when the injected script sends the first\n* Shows the button on toolbar.\n* Saves a reference to the injected script for later messaging.\n* Saves a reference to the tab so we can check current URL.",
+            "itemtype": "method",
+            "name": "groovetoggleConnect",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "Original message event.",
+                    "type": "MessageEvent",
+                    "optional": true
+                }
+            ],
+            "class": "GrooveToggle.myBgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 176,
+            "description": "Listen to clicks to button on Opera toolbar.\nIt always send a message to injected script even if there are no songs\nin the queue cause we can't suscribe to the \"restore-queue\" event.",
+            "itemtype": "method",
+            "name": "handleClick",
+            "class": "GrooveToggle.myBgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 188,
+            "description": "Listen to changes of the song status.",
+            "itemtype": "method",
+            "name": "handleStatus",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "The original message sent by injected script.",
+                    "type": "Object"
+                }
+            ],
+            "class": "GrooveToggle.myBgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 225,
+            "description": "Check if the tab that have been closed if the one hosting the injected script.",
+            "itemtype": "method",
+            "name": "handleTabClose",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "The original event.",
+                    "type": "Object"
+                }
+            ],
+            "class": "GrooveToggle.myBgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 235,
+            "description": "Hide button and remove references to injected script.",
+            "itemtype": "method",
+            "name": "destroy",
+            "class": "GrooveToggle.myBgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 245,
+            "description": "Ping the tab with the injected script to make sure we are still in Grooveshark.",
+            "itemtype": "method",
+            "name": "pingTab",
+            "class": "GrooveToggle.myBgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        },
+        {
+            "file": "background.coffee",
+            "line": 261,
+            "description": "Init the app.",
+            "itemtype": "method",
+            "name": "init",
+            "class": "GrooveToggle.myBgApp",
+            "module": "GrooveToggle",
+            "namespace": "GrooveToggle"
+        }
+    ],
+    "warnings": []
+}
